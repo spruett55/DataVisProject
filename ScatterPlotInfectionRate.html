@@ -212,7 +212,7 @@ data = Promise.all(
             fill: brown;
         }
     </style>
-    //
+    
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="//d3js.org/d3.v5.min.js"></script>
     <script>
@@ -221,7 +221,7 @@ data = Promise.all(
             margin = {
                 top: 20,
                 right: 20,
-                bottom: 30,
+                bottom: 110,
                 left: 50
             },
             width = +svg.attr("width") - margin.left - margin.right,
@@ -333,15 +333,19 @@ data = Promise.all(
                 for (let country of dataMap.keys()) {
                     gdp = dataMap.get(country).get("gdp");
                     deathRate = dataMap.get(country).get("deathRate");
-                    console.log(deathRate);
-                    // if (gdp > 5000000 || infectionRate > 0.003){
-                    //     continue;
-                    // }
+                    if (deathRate >0.001){
+                        continue;
+                    }
                     dataset.push([gdp, deathRate, country]);
     
                 }
+                console.log(dataset);
+                dataset.sort((a,b) => {
+                    d3.ascending(a[1], b[1])
+                });
+                console.log(dataset);
                 var x = d3.scaleBand()
-                    .domain(dataset.map(d => d[0]))
+                    .domain(dataset.map(d => d[2]))
                     .rangeRound([0, width])
                     // .range([padding, w-padding * 2]);
                     .padding(0.1);
@@ -357,10 +361,12 @@ data = Promise.all(
                 // 	y.domain([0, d3.max(data, function (d) {
                 // 				return Number(d.Speed);
                 // 			})]);
-    
                 g.append("g")
                     .attr("transform", "translate(0," + height + ")")
                     .call(d3.axisBottom(x))
+                    .selectAll("text")
+                    .attr("transform", "translate(0,55) rotate(90)")
+                    //.attr("transform", "translate(0, 10)")
     
                 g.append("g")
                     .call(d3.axisLeft(y))
@@ -370,21 +376,20 @@ data = Promise.all(
                     .attr("y", 6)
                     .attr("dy", "0.71em")
                     .attr("text-anchor", "end")
-                    .text("Speed");
+                    .text("InfectionRate");
     
                 g.selectAll(".bar")
-                    .data(data)
+                    .data(dataset)
                     .enter().append("rect")
                     .attr("class", "bar")
                     .attr("x", function (d) {
-                        return x(d[0]);
+                        return x(d[2]);
                     })
                     .attr("y", function (d) {
                         return y(d[1]);
                     })
                     .attr("width", x.bandwidth())
                     .attr("height", function (d) {
-                        console.log(d[1]);
                         return height - y(d[1]);
                     });
             });
