@@ -352,7 +352,7 @@
         console.log(dataset);
         dataset.sort((a, b) => {
           console.log(d3.ascending(a[1], b[1]));
-          return d3.ascending(a[1], b[1])
+          return d3.ascending(a[0], b[0])
         });
         console.log(dataset);
         var x = d3.scaleBand()
