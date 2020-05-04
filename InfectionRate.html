@@ -100,7 +100,7 @@
         //width and height
         var w = 600;
         var h = 400;
-        var padding = 10000;
+        var padding = 100;
         console.log(dataMap);
         //max vs min
         var dataset = [];
@@ -196,8 +196,8 @@
 
         svg.append("text")
           .attr("transform",
-            "translate(" + (width / 2) + " ," +
-            (height + margin.top + 20) + ")")
+            "translate(" + (w / 2) + " ," +
+            (h + margin.top + 20) + ")")
           .style("text-anchor", "middle")
           .text("Date");
 
