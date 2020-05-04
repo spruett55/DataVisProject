@@ -186,19 +186,20 @@
           .on("mouseover", mouseover)
           .on("mousemove", mousemove)
           .on("mouseleave", mouseleave);
-        
-        svg.append("text")
-          .attr("transform",
-            "translate(" + (width / 2) + " ," +
-            (height + margin.top + 20) + ")")
-          .style("text-anchor", "middle")
-          .text("Date");
+
 
         //x axis
         svg.append("g")
           .attr("class", "x axis")
           .attr("transform", "translate(0," + (h - padding) + ")")
           .call(xAxis);
+
+        svg.append("text")
+          .attr("transform",
+            "translate(" + (width / 2) + " ," +
+            (height + margin.top + 20) + ")")
+          .style("text-anchor", "middle")
+          .text("Date");
 
         //y axis
         svg.append("g")
