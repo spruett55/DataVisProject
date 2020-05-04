@@ -198,16 +198,21 @@
 
         svg.append("text")
           .attr("transform",
-            "translate(" + (w / 2) + " ," +
-            (h + margin.top + 20) + ")")
+            "translate(290, 380)")
           .style("text-anchor", "middle")
-          .text("Date");
+          .text("GDP");
 
         //y axis
         svg.append("g")
           .attr("class", "y axis")
           .attr("transform", "translate(" + padding + ", 0)")
           .call(yAxis);
+        svg.append("text")
+          .attr("transform",
+            "translate(12, 200) rotate(-90)")
+          .style("text-anchor", "middle")
+          .text("Infection Rate");
+
       });
 
 
