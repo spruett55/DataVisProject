@@ -347,26 +347,15 @@ data = Promise.all(
                 var x = d3.scaleBand()
                     .domain(dataset.map(d => d[2]))
                     .rangeRound([0, width])
-                    // .range([padding, w-padding * 2]);
                     .padding(0.1);
                 var y = d3.scaleLinear()
                     .domain([0.000000000000000001, d3.max(dataset, function (d) { return d[1]; })])
-                    //.range([padding, w-padding * 2]);
-                    // .range([h - padding, padding]);
-                    .rangeRound([height, 0])
-                // d3.tsv("morley.tsv").then(function (data) {
-                // 	x.domain(data.map(function (d) {
-                // 			return d.Run;
-                // 		}));
-                // 	y.domain([0, d3.max(data, function (d) {
-                // 				return Number(d.Speed);
-                // 			})]);
+                    .rangeRound([height, 0]);
                 g.append("g")
                     .attr("transform", "translate(0," + height + ")")
                     .call(d3.axisBottom(x))
                     .selectAll("text")
-                    .attr("transform", "translate(0,55) rotate(90)")
-                    //.attr("transform", "translate(0, 10)")
+                    .attr("transform", "translate(0,55) rotate(90)");
     
                 g.append("g")
                     .call(d3.axisLeft(y))
