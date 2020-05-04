@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<svg width="960" height="500"></svg>
+<style>
+    .bar {
+        fill: steelblue;
+    }
+
+    .bar:hover {
+        fill: brown;
+    }
+</style>
+//
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="//d3js.org/d3.v5.min.js"></script>
+<script>
+
+    var svg = d3.select("svg"),
+        margin = {
+            top: 20,
+            right: 20,
+            bottom: 30,
+            left: 50
+        },
+        width = +svg.attr("width") - margin.left - margin.right,
+        height = +svg.attr("height") - margin.top - margin.bottom,
+        g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    var x = d3.scaleBand()
+        .rangeRound([0, width])
+        .padding(0.1);
+
+    var y = d3.scaleLinear()
+        .rangeRound([height, 0]);
+    var parseTime = d3.timeParse("%d/%m/%Y");
+    //how do I access multiple excel docs and put them into one dataset?
+    data = Promise.all(
+        [d3.csv("time_series_covid_19_confirmed.csv"),
+        d3.csv("time_series_covid_19_deaths.csv"),
+        d3.csv("WorldRealGDPAnnual.csv"),
+        d3.csv("population_by_country_2020.csv")])
+        .then(data => {
+            data.forEach((document, i) => {
+                document.forEach(d => {
+                    if (i === 0) {
+                        d.cases = +d["4/19/20"];
+                        d.country = d["Country/Region"];
+                    }
+                    if (i === 1) {
+                        d.deaths = +d["4/19/20"];
+                        d.country = d["Country/Region"];
+                    }
+                    if (i === 2) {
+                        d.gdp = +d["2017"];
+                        d.country = d["Country"];
+                    }
+                    if (i === 3) {
+                        d.population = +d["Population (2020)"];
+                        d.country = d["Country (or dependency)"];
+                    }
+                })
+            });
+            var dataMap = new Map()
+            //adding gdp to map
+            //has Nan values
+            for (var i = 0; i < data[2].length; i++) {
+                var initMap = new Map()
+                initMap.set("gdp", data[2][i].gdp);
+                dataMap.set(data[2][i].country, initMap);
+            }
+            console.log(dataMap);
+            //adding cases to map
+            for (var i = 0; i < data[0].length; i++) {
+                if (dataMap.has(data[0][i].country)) {
+                    if (dataMap.get(data[0][i].country).has("cases")) {
+                        dataMap.get(data[0][i].country).set("cases", dataMap.get(data[0][i].country).get("cases") + data[0][i].cases);
+                    }
+                    else {
+                        dataMap.get(data[0][i].country).set("cases", data[0][i].cases);
+                    }
+                }
+            }
+            //adding deaths to map
+            for (var i = 0; i < data[1].length; i++) {
+                if (dataMap.has(data[1][i].country)) {
+                    if (dataMap.get(data[1][i].country).has("deaths")) {
+                        dataMap.get(data[1][i].country).set("deaths", dataMap.get(data[1][i].country).get("deaths") + data[1][i].deaths);
+                    }
+                    else {
+                        dataMap.get(data[1][i].country).set("deaths", data[1][i].deaths);
+                    }
+                }
+            }
+            //adding population to map
+            for (var i = 0; i < data[3].length; i++) {
+                if (dataMap.has(data[3][i].country)) {
+                    dataMap.get(data[3][i].country).set("population", data[3][i].population);
+                }
+            }
+            //adding deathRate to map
+            for (let country of dataMap.keys()) {
+                if (dataMap.get(country).has("population") && dataMap.get(country).has("deaths")) {
+                    dataMap.get(country).set("deathRate", dataMap.get(country).get("deaths") / dataMap.get(country).get("population"));
+                }
+            }
+            //adding infectionRate to map
+            for (let country of dataMap.keys()) {
+                if (dataMap.get(country).has("population") && dataMap.get(country).has("cases")) {
+                    dataMap.get(country).set("infectionRate", dataMap.get(country).get("cases") / dataMap.get(country).get("population"));
+                }
+            }
+            //removing countries with incomplete data from map
+            for (let country of dataMap.keys()) {
+                if (dataMap.get(country).size != 6) {
+                    dataMap.delete(country);
+                    continue;
+                }
+                for (let trait of dataMap.get(country)) {
+                    if (!trait[1]) {
+                        dataMap.delete(country);
+                    }
+                }
+            }
+            //width and height
+            var w = 600;
+            var h = 400;
+            var padding = 40;
+            console.log(dataMap);
+            //max vs min
+            var dataset = [];
+            for (let country of dataMap.keys()) {
+                gdp = dataMap.get(country).get("gdp");
+                deathRate = dataMap.get(country).get("deathRate");
+                console.log(deathRate);
+                // if (gdp > 5000000 || infectionRate > 0.003){
+                //     continue;
+                // }
+                dataset.push([gdp, deathRate, country]);
+
+            }
+            var x = d3.scaleBand()
+                .domain(dataset.map(d => d[0]))
+                .rangeRound([0, width])
+                // .range([padding, w-padding * 2]);
+                .padding(0.1);
+            var y = d3.scaleLinear()
+                .domain([0.000000000000000001, d3.max(dataset, function (d) { return d[1]; })])
+                //.range([padding, w-padding * 2]);
+                // .range([h - padding, padding]);
+                .rangeRound([height, 0])
+            // d3.tsv("morley.tsv").then(function (data) {
+            // 	x.domain(data.map(function (d) {
+            // 			return d.Run;
+            // 		}));
+            // 	y.domain([0, d3.max(data, function (d) {
+            // 				return Number(d.Speed);
+            // 			})]);
+
+            g.append("g")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(x))
+
+            g.append("g")
+                .call(d3.axisLeft(y))
+                .append("text")
+                .attr("fill", "#000")
+                .attr("transform", "rotate(-90)")
+                .attr("y", 6)
+                .attr("dy", "0.71em")
+                .attr("text-anchor", "end")
+                .text("Speed");
+
+            g.selectAll(".bar")
+                .data(data)
+                .enter().append("rect")
+                .attr("class", "bar")
+                .attr("x", function (d) {
+                    return x(d[0]);
+                })
+                .attr("y", function (d) {
+                    return y(d[1]);
+                })
+                .attr("width", x.bandwidth())
+                .attr("height", function (d) {
+                    console.log(d[1]);
+                    return height - y(d[1]);
+                });
+        });
+
+</script>
