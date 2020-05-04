@@ -191,15 +191,13 @@ data = Promise.all(
 		svg.append("g")
 			.attr("class", "x axis")	
 			.attr("transform", "translate(0," + (h - padding) + ")")
-			.call(xAxis)
-      .text("GDP");
+			.call(xAxis);
 		
 		//y axis
 		svg.append("g")
 			.attr("class", "y axis")	
 			.attr("transform", "translate(" + padding + ", 0)")
-			.call(yAxis)
-      .text("Infection Rate");
+			.call(yAxis);
         });
 	
 		
