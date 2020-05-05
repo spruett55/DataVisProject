@@ -8,7 +8,22 @@
 
 <body>
   <h1>Comparing Infection Rate to GDP</h1>
-  <h6>In this section, a country's GDP is compared to its Infection Rate. </h6>
+  <h3>In this section, a country's GDP is compared to its Infection Rate.
+    GDP is 2017 annual data, and Infection Rate is the number of cases in
+    a country divided by the country's total population. </h3>
+  <h2>Bar Chart</h2>
+  <p>This bar chart visualizes the infection rate for countries around the world. 
+    It is ordered by each countries GDP, starting from lowest on the left, to highest 
+    on the right. As shown, there seems to be no statistically significant relationship 
+    between GDP and Infection rate. If there was, we would see more countries with 
+    similar infection rates grouped together, but this is not the case. Countries with 
+    vastly different GDP like the US and Zimbabwae can have similar infection rates, 
+    and countries with similar GDP like Bangladesh and Indonesia can have vastly 
+    different infection rates. It is worth noting that some countries have been 
+    omitted from this visualization even if their data was available, since they were 
+    large outliers. The lack of uniformity and abundance of outliers further 
+    strengthens the argument that there is no significant relationship between a 
+    country's GDP and infection rate. </p>
   <script type="text/javascript">
 
     var parseTime = d3.timeParse("%d/%m/%Y");
@@ -400,6 +415,20 @@
       });
 
   </script>
+  <h2>ScatterPlot</h2>
+  <p>This scatterplot directly visualizes the infection rate compared 
+    to GDP for countries around the world. To view the data for each 
+    point, hover your cursor over the point of interest. The infection 
+    rate for each country has also been multiplied to show data in a 
+    more reasonable scale. Since each countries GDP can vary by multiple 
+    orders of magnitude, the horizontal (x) axis is scaled logarithmically. 
+    In this case, the scatterplot truly lives up to its name, as the data 
+    seems to be randomly scattered across the plot. This, again, tells 
+    us that there is no statistically significant relationship between 
+    infection rate and GDP. Countries with similar GDP like Sudan and 
+    Panama have differing infection rates, and counties with starkly 
+    different GDP like the US and San Marino can have similar infection 
+    rates.</p>
 </body>
 
 </html>
