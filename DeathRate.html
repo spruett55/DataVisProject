@@ -2,31 +2,15 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Infection Rate By Country</title>
+  <title>Mortality Rate By Country</title>
   <script src="https://d3js.org/d3.v5.min.js"></script>
 </head>
 
 <body>
-  <h1>Comparing Infection Rate to GDP</h1>
-  <h3>In this section, a country's GDP is compared to its Infection Rate.
-    GDP is 2017 annual data, and Infection Rate is the number of cases in
-    a country divided by the country's total population. </h3>
+  <h1>Comparing Mortality Rate to GDP</h1>
+  <h3></h3>
   <h2>Bar Chart</h2>
-  <p>This bar chart visualizes the infection rate for countries around the world. 
-    It is ordered by each countries GDP, starting from lowest on the left, to highest 
-    on the right. As shown, there seems to be no statistically significant relationship 
-    between GDP and Infection rate. If there was, we would see more countries with 
-    similar infection rates grouped together, but this is not the case. Countries with 
-    vastly different GDP like the Iran and Zimbabwae can have similar infection rates, 
-    and countries with similar GDP like Bangladesh and Indonesia can have vastly 
-    different infection rates. The only trend to be seen is a slight decrease in the 
-    frequency of relatively high infection rates as a countries GDPs increase. This 
-    trend, however, is too weak to warrant further investigation, as medical technology 
-    is likely a far better indicator. It is worth noting that some countries have been 
-    omitted from this visualization even if their data was available, since they were 
-    large outliers. The lack of uniformity and abundance of outliers further 
-    strengthens the argument that there is no significant relationship between a 
-    country's GDP and infection rate. </p>
+  <p></p>
   <script type="text/javascript">
 
     var parseTime = d3.timeParse("%d/%m/%Y");
@@ -126,11 +110,11 @@
         var dataset = [];
         for (let country of dataMap.keys()) {
           gdp = dataMap.get(country).get("gdp");
-          infectionRate = 10000000 * dataMap.get(country).get("infectionRate");
+          deathRate = 100000000 * dataMap.get(country).get("deathRate");
           // if (gdp > 5000000 || infectionRate > 0.003){
           //     continue;
           // }
-          dataset.push([gdp, infectionRate, country]);
+          dataset.push([gdp, deathRate, country]);
 
         }
         console.log(dataset);
@@ -171,7 +155,7 @@
 
         var mousemove = function (d) {
           tooltip
-            .html("Country: " + d[2] + " GDP: " + d[0] + " Infection Rate: " + d[1])
+            .html("Country: " + d[2] + " GDP: " + d[0] + " Mortality Rate: " + d[1])
             .style("left", (d3.mouse(this)[0] + 90) + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
             .style("top", (d3.mouse(this)[1]) + "px")
         }
@@ -229,7 +213,7 @@
           .attr("transform",
             "translate(12, 200) rotate(-90)")
           .style("text-anchor", "middle")
-          .text("Infection Rate");
+          .text("Mortality Rate");
 
       });
 
@@ -365,11 +349,11 @@
         var dataset = [];
         for (let country of dataMap.keys()) {
           gdp = dataMap.get(country).get("gdp");
-          infectionRate = dataMap.get(country).get("infectionRate");
-          if (infectionRate > 0.001) {
+          deathRate = dataMap.get(country).get("deathRate");
+          if (deathRate > 0.001) {
             continue;
           }
-          dataset.push([gdp, infectionRate, country]);
+          dataset.push([gdp, deathRate, country]);
 
         }
         console.log(dataset);
@@ -399,7 +383,7 @@
           .attr("y", 6)
           .attr("dy", "0.71em")
           .attr("text-anchor", "end")
-          .text("InfectionRate");
+          .text("Mortality Rate");
 
         g.selectAll(".bar")
           .data(dataset)
@@ -419,21 +403,7 @@
 
   </script>
   <h2>ScatterPlot</h2>
-  <p>This scatterplot directly visualizes the infection rate compared 
-    to GDP for countries around the world. To view the data for each 
-    point, hover your cursor over the point of interest. The infection 
-    rate for each country has also been multiplied to show data in a 
-    more reasonable scale. Since each countries GDP can vary by multiple 
-    orders of magnitude, the horizontal (x) axis is scaled logarithmically. 
-    In this case, the scatterplot truly lives up to its name, as the data 
-    seems to be randomly scattered across the plot. This, again, tells 
-    us that there is no statistically significant relationship between 
-    infection rate and GDP. Countries with similar GDP like Sudan and 
-    Panama have differing infection rates, and counties with starkly 
-    different GDP like the US and San Marino can have similar infection 
-    rates. Again, the seemingly random cluster of points gives more 
-    creedence to the argument that there is no significant relationship 
-    between a country's GDP and their infection rate.</p>
+  <p></p>
 </body>
 
 </html>
